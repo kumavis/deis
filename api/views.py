@@ -10,6 +10,7 @@ from Crypto.PublicKey import RSA
 from celery.canvas import group
 from django.contrib.auth.models import AnonymousUser, User
 from django.utils import timezone
+from guardian.shortcuts import get_objects_for_user
 from rest_framework import permissions, status, viewsets
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.generics import get_object_or_404
@@ -153,6 +154,14 @@ class FormationViewSet(OwnerViewSet):
     model = models.Formation
     serializer_class = serializers.FormationSerializer
     lookup_field = 'id'
+
+    def get_queryset(self, **kwargs):
+        """
+        Filter Formations by `owner` attribute or the
+        `api.use_formation` permission.
+        """
+        return super(FormationViewSet, self).get_queryset(**kwargs) | \
+            get_objects_for_user(self.request.user, 'api.use_formation')
 
     def post_save(self, formation, created=False, **kwargs):
         if created:

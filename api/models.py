@@ -176,6 +176,7 @@ class Formation(UuidAuditedModel):
     nodes = JSONField(default='{}', blank=True)
 
     class Meta:
+        permissions = (('use_formation', 'Can use formation'),)
         unique_together = (('owner', 'id'),)
 
     def __str__(self):

@@ -149,6 +149,7 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'djcelery',
+    'guardian',
     'json_field',
     'rest_framework',
     'south',
@@ -163,10 +164,12 @@ INSTALLED_APPS = (
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
+    "guardian.backends.ObjectPermissionBackend",
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
+ANONYMOUS_USER_ID = -1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_LOGOUT_ON_GET = True
