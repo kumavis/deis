@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   # The Deis Controller requires at least 1G of RAM to install.
   # You may be able to run it with less once it's installed.
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--memory", "4096"]
   end
 
   # 'deis provider:discover' detects the host machine's user and IP address, however, that command cannot

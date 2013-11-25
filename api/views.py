@@ -11,6 +11,8 @@ from celery.canvas import group
 from django.contrib.auth.models import AnonymousUser, User
 from django.utils import timezone
 from guardian.shortcuts import get_objects_for_user
+from guardian.shortcuts import assign_perm
+from guardian.shortcuts import remove_perm
 from rest_framework import permissions, status, viewsets
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.generics import get_object_or_404
@@ -284,6 +286,30 @@ class FormationNodeViewSet(FormationScopedViewSet):
         node = self.get_object()
         node.destroy()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FormationSharingViewSet(viewsets.ViewSet):
+    """RESTful views for sharing formations with collaborators."""
+
+    def list(self, request, **kwargs):
+        raise NotImplementedError
+
+    def create(self, request, **kwargs):
+        formation = get_object_or_404(models.Formation, id=kwargs['id'])
+        if request.user != formation.owner:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        user = get_object_or_404(User, username=request.DATA['user'])
+        assign_perm('use_formation', user, formation)
+        return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, **kwargs):
+        formation = get_object_or_404(models.Formation, id=kwargs['id'])
+        user = get_object_or_404(User, username=kwargs['username'])
+        if user.has_perm('use_formation', formation):
+            remove_perm('use_formation', user, formation)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class NodeViewSet(FormationNodeViewSet):

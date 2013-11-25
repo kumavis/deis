@@ -39,3 +39,4 @@ from .layer import *  # noqa
 from .node import *  # noqa
 from .provider import *  # noqa
 from .release import *  # noqa
+from .test_sharing import *  # noqa

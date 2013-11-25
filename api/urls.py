@@ -166,6 +166,22 @@ Formation Actions
   :meth:`FormationViewSet.converge() <api.views.FormationViewSet.converge>`
 
 
+Formation Sharing
+-----------------
+
+.. http:delete:: /api/formations/(string:id)/sharing/(string:sharing_id)/
+
+  Destroy a formation permission by its `id`.
+
+.. http:get:: /api/formations/(string:id)/sharing/
+
+  List all permissions granted to this formation.
+
+.. http:post:: /api/formations/(string:id)/sharing/
+
+  Create a new formation permission.
+
+
 Applications
 ============
 
@@ -362,6 +378,11 @@ urlpatterns = patterns(
         views.FormationViewSet.as_view({'post': 'calculate'})),
     url(r'^formations/(?P<id>[-_\w]+)/converge/?',
         views.FormationViewSet.as_view({'post': 'converge'})),
+    # formation sharing
+    url(r'^formations/(?P<id>[-_\w]+)/sharing/(?P<username>[-_\w]+)/?',
+        views.FormationSharingViewSet.as_view({'delete': 'destroy'})),
+    url(r'^formations/(?P<id>[-_\w]+)/sharing/?',
+        views.FormationSharingViewSet.as_view({'get': 'list', 'post': 'create'})),
     # formation base endpoint
     url(r'^formations/(?P<id>[-_\w]+)/?',
         views.FormationViewSet.as_view({

@@ -83,7 +83,6 @@ class Key(UuidAuditedModel):
         self.owner.publish()
 
 
-@python_2_unicode_compatible
 class ProviderManager(models.Manager):
     """Manage database interactions for :class:`Provider`."""
 
@@ -126,7 +125,6 @@ class Provider(UuidAuditedModel):
         return "{}-{}".format(self.id, self.get_type_display())
 
 
-@python_2_unicode_compatible
 class FlavorManager(models.Manager):
     """Manage database interactions for :class:`Flavor`."""
 
@@ -293,7 +291,6 @@ class Layer(UuidAuditedModel):
         return tasks.destroy_layer.delay(self).wait()
 
 
-@python_2_unicode_compatible
 class NodeManager(models.Manager):
 
     def new(self, formation, layer, fqdn=None):
@@ -538,7 +535,6 @@ class App(UuidAuditedModel):
         return node.run(command)
 
 
-@python_2_unicode_compatible
 class ContainerManager(models.Manager):
 
     def scale(self, app, structure, **kwargs):
